@@ -1,0 +1,59 @@
+; This is an example ini file for Ö1 downloads
+; for most values, you can use Python's full str.format() syntax'
+
+
+; a broadcast section
+; its name is available via {SECTION} for the values
+[Radiogeschichten]
+
+; comma separated days
+; day = 0: Monday
+; default:
+; 0,1,2,3,4,5,6
+Days = 0,1,2,3,4
+
+; time windoww for the scheduled start
+; default:
+; 00:00-24:00
+TimeWindow = 11:00 - 11:30
+
+; target directory for the downloaded & converted files
+; default:
+; {DOWNLOAD_BASEDIR}/{SECTION}
+TargetDir = {DOWNLOAD_BASEDIR}/{SECTION}
+
+; target name for the converted file
+; default:
+; {scheduled_start:%Y-%m-%d %Hh%M} Ö1 {title} {info_1line_limited}
+TargetName = {scheduled_start:%Y-%m-%d %Hh%M} Ö1 {title} {info_1line_limited}
+
+; Keep the original files or delete them?
+; anything other than "False" will keep them
+; default:
+; True
+KeepOriginal = True
+
+; arguments for the conversion via FFmpeg (only the codec settings)
+; the extension will be determined by the codec
+; default:
+; -c:a libopus -b:a 36k -vbr on -compression_level 10 -frame_duration 60 -application voip
+FFmpegArguments = -c:a libopus -b:a 36k -vbr on -compression_level 10 -frame_duration 60 -application voip
+
+; download the file if the title matches this
+; you can use regex here
+title = Radiogeschichten
+
+; keys starting with "Tag" will be used for tagging the output file
+; E.g. "TagArtist"" will contain the "artist" tag
+TagArtist = Ö1
+TagAlbum = {SECTION}
+TagTitle = {scheduled_start:%Y-%m-%d %H:%M} {title} {info_1line_limited} (id:{id})
+TagDate = {scheduled_start:%Y}
+TagGenre = Podcast
+TagComment = {extended_info}
+
+; another section...
+[Die Hörspiel-Galerie]
+Days = 5
+TimeWindow = 13:59 - 14:30
+title = hörspiel
