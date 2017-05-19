@@ -23,7 +23,7 @@ import mutagen
 import html2text
 from tqdm import tqdm
 
-__version__ = '2017-05-18.0'
+__version__ = '2017-05-19.0'
 
 SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 HTML_CACHE_FN = 'oe1cache.json.bz2'
@@ -191,7 +191,7 @@ class BroadcastsDownloader:
         try:
             self._load_configuration()
         except Exception as e:
-            print('Error parsing configuration file: {}'.format(self.ini_fn), file=sys.stderr)
+            print('Error parsing configuration file: {}\n{}'.format(self.ini_fn, e), file=sys.stderr)
             sys.exit(1)
 
         try:
@@ -323,7 +323,7 @@ class BroadcastsDownloader:
         return ''
 
     def _load_configuration(self):
-        config = configparser.ConfigParser()
+        config = configparser.ConfigParser(interpolation=None)
         config.optionxform = str
         try:
             with open(self.ini_fn, 'r', encoding='utf-8') as fin:

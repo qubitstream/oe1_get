@@ -45,6 +45,7 @@ title = Radiogeschichten
 
 ; keys starting with "Tag" will be used for tagging the output file
 ; E.g. "TagArtist"" will contain the "artist" tag
+; these are all default values
 TagArtist = Ö1
 TagAlbum = {SECTION}
 TagTitle = {scheduled_start:%Y-%m-%d %H:%M} {title} {info_1line_limited} (id:{id})
