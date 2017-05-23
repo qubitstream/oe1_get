@@ -262,7 +262,7 @@ class BroadcastsDownloader:
                         if not os.path.isdir(target_dir):
                             os.makedirs(target_dir)
                         # download media file
-                        if not os.path.isfile(download_fn):
+                        if not os.path.isfile(download_fn) and (not os.path.isfile(conversion_fn) or self.reconvert):
                             try:
                                 response = requests.get(broadcast.download_url, stream=True)
                                 total_size = int(response.headers.get('content-length', 0))
@@ -280,12 +280,13 @@ class BroadcastsDownloader:
                                 if os.path.isfile(download_fn):
                                     os.remove(download_fn)
                                 raise
-                        if not os.path.isfile(download_fn):
-                            raise ValueError('File {} does not exist'.format(download_fn))
-                        if download_fn == conversion_fn:
-                            raise ValueError('Conversion: Same filename as input file')
+
                         newly_converted = False
                         if not os.path.isfile(conversion_fn) or self.reconvert:
+                            if not os.path.isfile(download_fn):
+                                raise ValueError('File {} does not exist'.format(download_fn))
+                            if download_fn == conversion_fn:
+                                raise ValueError('Conversion: Same filename as input file')
                             # convert media file
                             tqdm.write('Encoding {}'.format(target_fn))
                             encode_audiofile(download_fn, conversion_fn,
@@ -293,8 +294,6 @@ class BroadcastsDownloader:
                                 ffmpeg_options=ffmpeg_options,
                                 length=self._length if self._length > 0 else None)
                             newly_converted = True
-                        else:
-                            tqdm.write('Using already existing file: {}'.format(conversion_fn))
                         # tag media file
                         if newly_converted or self.retag:
                             tag_dict = {}
