@@ -124,6 +124,7 @@ class Broadcast:
             'extended_info': '',
             'extended_info_text_only': '',
             'info_1line': '',
+            'info_1line_limited': '',
             'download_url': self.download_url,
         })
         text = []
@@ -245,7 +246,8 @@ class BroadcastsDownloader:
 
                     target_dir = self.broadcasts_rules[section]['ini']['TargetDir'].format_map(metadata)
                     ffmpeg_options = self.broadcasts_rules[section]['ini']['FFmpegArguments']
-                    target_fn = repl_unsave(self.broadcasts_rules[section]['ini']['TargetName'].format_map(metadata))
+                    target_fn = repl_unsave(
+                        self.broadcasts_rules[section]['ini']['TargetName'].format_map(metadata)).strip()
                     if 'opus' in ffmpeg_options.lower():
                         target_fn += '.opus'
                     elif 'mp3' in ffmpeg_options.lower():
