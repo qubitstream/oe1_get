@@ -3,7 +3,7 @@
 # This script downloads, converts and tags broadcasts of Austria's Ö1 radio station.
 # It is compatible with the current 2017 program schedule.
 #
-# Written by: Christoph Haunschmidt 2017
+# Written by: Christoph Haunschmidt 2017+
 # License: GNU GPL 2.0
 
 import os
@@ -23,7 +23,7 @@ import mutagen
 import html2text
 from tqdm import tqdm
 
-__version__ = '2017-05-19.0'
+__version__ = '2021-05-04.0'
 
 SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 HTML_CACHE_FN = 'oe1cache.json.bz2'
@@ -31,7 +31,7 @@ FFMPEG_EXECUTABLE = 'ffmpeg'
 
 # URL for last 7 days json data
 CURRENT_URL = r'https://audioapi.orf.at/oe1/api/json/current/broadcasts'
-DOWNLOAD_BASE_URL = r'http://loopstream01.apa.at/?channel=oe1&id='
+DOWNLOAD_BASE_URL = r'https://loopstream01.apa.at/?channel=oe1&id='
 
 INI_SECTION_DEFAULTS = {
     'TimeWindow':'00:00-24:00',
@@ -266,7 +266,7 @@ class BroadcastsDownloader:
                         # download media file
                         if not os.path.isfile(download_fn) and (not os.path.isfile(conversion_fn) or self.reconvert):
                             try:
-                                response = requests.get(broadcast.download_url, stream=True)
+                                response = requests.get(broadcast.download_url, stream=True, timeout=3)
                                 total_size = int(response.headers.get('content-length', 0))
                                 chunk_size = 1024 * 1024
                                 with open(download_fn, 'wb') as fout:
