@@ -23,7 +23,7 @@ import mutagen
 import html2text
 from tqdm import tqdm
 
-__version__ = '2021-05-04.0'
+__version__ = '2021-12-23.0'
 
 SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 HTML_CACHE_FN = 'oe1cache.json.bz2'
@@ -317,10 +317,13 @@ class BroadcastsDownloader:
         scheduled_time = dt.time()
         weekday = dt.weekday()
         for section, rule in self.broadcasts_rules.items():
-            if (rule['start_time'] <= scheduled_time <= rule['end_time']
-                    and weekday in rule['days']
-                    and rule['search_regexes']['title'].search(broadcast['title'])):
-                return section
+            try:
+                if (rule['start_time'] <= scheduled_time <= rule['end_time']
+                        and weekday in rule['days']
+                        and rule['search_regexes']['title'].search(broadcast['title'])):
+                    return section
+            except Exception as e:
+                tqdm.write('Error {} {}'.format(broadcast, e))
         return ''
 
     def _load_configuration(self):
